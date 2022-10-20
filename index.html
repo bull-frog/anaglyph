@@ -1,0 +1,77 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>アナグリフの生成</title>
+		<meta charset="UTF-8">
+		<link rel="stylesheet" href="master.css">
+	</head>
+	<script src="main.js"></script>
+	<body>
+		<h1>アナグリフの生成</h1>
+		<form >
+			左眼用：<input id="input_left" type="file" accept="image/*" onchange="onFileSelect(this.files[0], 'left')"><br>
+			右眼用：<input id="input_right" type="file" accept="image/*" onchange="onFileSelect(this.files[0], 'right')">
+		</form>
+
+		
+
+		<div id="container">
+			<div>
+				<canvas id="canvas_main" width="2048" height="2048"></canvas>
+				<ul>
+					注意点的な：
+					<li>右クリックでダウンロードできます。</li>
+					<li>画像の「彩度」「コントラスト」は、上げたほうが絶対良いです。</li>
+					<li>明度も必要なら上げてください。</li>
+					<li>生成した画像は適宜トリミングしてください。</li>
+				</ul>
+			</div>
+			<div>
+				<div id="stereo_preview_container">
+					<form onload="this.reset();">
+						<input type="radio" id="button_parallel" name="button_preview" value="0" onclick="previewMode(false);" checked><label for="button_parallel">平行法</label>
+						<input type="radio" id="button_cross" name="button_preview" value="0" onclick="previewMode(true);"><label for="button_cross">交差法</label>
+					</form>
+					<div id="stereo_preview">
+						<canvas style="border: 6px solid cyan;" id="pv_left" width="2048" height="2048"></canvas>　
+						<canvas style="border: 6px solid #FF5500;" id="pv_right" width="2048" height="2048"></canvas>
+					</div>
+				</div>
+				<div id="controls">
+					<fieldset>
+						<legend>表示形式</legend>
+						<form onload="this.reset();">
+							<div><input type="radio" id="button_original" name="button_display" value="0" onclick="dispMode = 'original'; finalPreview();"><label for="button_original">元の色</label></div>
+							<div><input type="radio" id="button_color" name="button_display" value="1" onclick="dispMode = 'filtered'; finalPreview();" checked><label for="button_color">赤青表示</label></div>
+						</form>
+					</fieldset>
+					<div>
+						<h2>左眼用</h2>
+						<div class="control">
+							<button style="grid-column: 2;" onclick="data_left.center_y -= 5; drawRawImage('left');">↑</button>
+							<button style="grid-row: 2;" onclick="data_left.center_x -= 5; drawRawImage('left');">←</button>
+							<div style="grid-row: 2; background-color: cyan;"></div>
+							<button style="grid-row: 2;" onclick="data_left.center_x += 5; drawRawImage('left');">→</button>
+							<button style="grid-column: 2;" onclick="data_left.center_y += 5; drawRawImage('left');">↓</button>
+						</div><br>
+						<button onclick="data_left.rot -= 0.5; drawRawImage('left');">　⤹　</button><button onclick="data_left.rot += 0.5; drawRawImage('left');">　⤸　</button><br>
+						<button onclick="data_left.scale += 0.01; drawRawImage('left');">　←→　</button><button onclick="data_left.scale -= 0.01; drawRawImage('left');">　→←　</button>
+					</div>
+					<div>
+						<h2>右眼用</h2>
+						<div class="control">
+							<button style="grid-column: 2;" onclick="data_right.center_y -= 5; drawRawImage('right');">↑</button>
+							<button style="grid-row: 2;" onclick="data_right.center_x -= 5; drawRawImage('right');">←</button>
+							<div style="grid-row: 2; background-color: #FF5500;"></div>
+							<button style="grid-row: 2;" onclick="data_right.center_x += 5; drawRawImage('right');">→</button>
+							<button style="grid-column: 2;" onclick="data_right.center_y += 5; drawRawImage('right');">↓</button>
+						</div><br>
+						<button onclick="data_right.rot -= 0.5; drawRawImage('right');">　⤹　</button><button onclick="data_right.rot += 0.5; drawRawImage('right');">　⤸　</button><br>
+						<button onclick="data_right.scale += 0.01; drawRawImage('right');">　←→　</button><button onclick="data_right.scale -= 0.01; drawRawImage('right');">　→←　</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		2022 ©Bossan
+	</body>
+</html>
